@@ -11,7 +11,7 @@ def load_documents(video_id):
         
         docs = loader.load()
         
-        return docs
+        return docs[0].page_content
 
     except Exception as e:
         print("fetch data from Youtube Error: ", str(e))

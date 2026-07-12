@@ -13,7 +13,7 @@ def get_vector_store():
     vector_store = Chroma(
         collection_name=COLLECTION_NAME,
         embedding_function=embeddings,
-        persist_directory="./app/data/chroma_db",
+        persist_directory="data/chroma_db",
     )
     
     return  vector_store
