@@ -1,5 +1,4 @@
 import heroImg from '../assets/hero.png';
-import { Icons } from './Icons';
 
 export default function ProductMockup() {
   return (
@@ -16,13 +15,12 @@ export default function ProductMockup() {
         <div className="w-12" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 min-h-[460px]">
+      <div className="grid grid-cols-1 md:grid-cols-12 min-h-115">
         <div className="md:col-span-7 border-b md:border-b-0 md:border-r border-slate-200 flex flex-col">
           <div className="relative bg-slate-900 aspect-video flex items-center justify-center overflow-hidden">
             <img src={heroImg} alt="Developer working" className="w-full h-full object-cover opacity-80" />
             <div className="absolute inset-0 bg-slate-950/20 flex items-center justify-center hover:bg-slate-950/30 transition-all cursor-pointer group">
               <div className="w-16 h-16 rounded-full bg-white/95 text-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <Icons.Play className="w-7 h-7 translate-x-0.5" />
               </div>
             </div>
           </div>
@@ -90,7 +88,6 @@ export default function ProductMockup() {
                 className="text-xs text-slate-400 bg-transparent border-none outline-none flex-1 pr-2"
               />
               <button disabled className="w-6 h-6 rounded-lg bg-indigo-600/50 flex items-center justify-center text-white cursor-not-allowed">
-                <Icons.Send />
               </button>
             </div>
           </div>

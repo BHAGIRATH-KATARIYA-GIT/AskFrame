@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom';
-import { Icons } from './Icons';
 
 export default function UrlInputSection() {
   return (
     <div className="mb-16 flex w-xl max-w-2xl flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-100/80 sm:flex-row">
       <div className="flex w-full flex-1 items-center space-x-3 pl-3">
-        <Icons.Link />
 
         <input
           type="text"

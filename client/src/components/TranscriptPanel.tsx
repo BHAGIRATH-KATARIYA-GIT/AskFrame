@@ -1,5 +1,5 @@
 
-import { Icons } from './Icons';
+
 
 const transcriptEntries = [
   {
@@ -25,7 +25,7 @@ export default function TranscriptPanel() {
     <div className="space-y-4 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
       <div className="flex items-center justify-between rounded-xl border border-slate-200/70 bg-slate-50 px-4 py-2.5 shadow-inner">
         <div className="flex flex-1 items-center space-x-2.5">
-          <Icons.Search />
+
 
           <input
             type="text"
@@ -34,10 +34,10 @@ export default function TranscriptPanel() {
           />
         </div>
 
-        <Icons.Copy />
+
       </div>
 
-      <div className="max-h-[300px] space-y-4 overflow-y-auto pr-1">
+      <div className="max-h-75 space-y-4 overflow-y-auto pr-1">
         {transcriptEntries.map((item) => (
           <div
             key={item.time}

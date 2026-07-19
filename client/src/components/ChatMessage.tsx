@@ -1,4 +1,4 @@
-import { Icons } from './Icons';
+
 
 const takeawayItems = [
   'AI is transitioning from simple chat interfaces to proactive reasoning agents.',
@@ -11,7 +11,7 @@ export default function ChatMessage() {
   return (
     <div className="flex justify-start">
       <div className="mr-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-100 shadow-sm">
-        <Icons.Sparkles />
+        {/* icon */}
       </div>
 
       <div className="max-w-[80%] rounded-2xl rounded-tl-sm border border-slate-200/80 bg-white px-4 py-3 text-sm leading-relaxed text-slate-700 shadow-sm">

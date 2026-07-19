@@ -1,6 +1,14 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink, type NavLinkRenderProps } from "react-router-dom";
 
 export default function Navbar() {
+  const linkClasses = ({ isActive }: NavLinkRenderProps) =>
+    `border-b-2 pb-1 pt-0.5 text-sm font-semibold transition-colors ${
+      isActive
+        ? "border-indigo-600 text-indigo-600"
+        : "border-transparent text-slate-500 hover:text-slate-800"
+    }`;
+
+
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between border-b border-slate-100 bg-white/80 px-6 py-4 backdrop-blur-md md:px-12">
       <NavLink to={"/"}>
@@ -16,37 +24,19 @@ export default function Navbar() {
       </NavLink>
 
       <nav className="hidden items-center space-x-8 md:flex">
-        <Link
-          to="/"
-          className="border-b-2 border-indigo-600 pb-1 pt-0.5 text-sm font-semibold text-indigo-600"
-        >
+        <NavLink to="/" end className={linkClasses}>
           Home
-        </Link>
+        </NavLink>
 
-        <Link
-          to="/"
-          className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
-          onClick={() => {
-            document
-              .getElementById("features")
-              ?.scrollIntoView({ behavior: "smooth" });
-          }}
-        >
-          Features
-        </Link>
-
-        <Link
-          to="/dashboard"
-          className="text-sm font-medium text-slate-500 transition-colors hover:text-slate-800"
-        >
+        <NavLink to="/dashboard" className={linkClasses}>
           Dashboard
-        </Link>
+        </NavLink>
       </nav>
 
       <div className="hidden items-center space-x-4 md:flex">
-        <button className="px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 ">
+        {/* <button className="px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 ">
           Log In
-        </button>
+        </button> */}
 
         <button className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-100 transition-colors hover:bg-indigo-700">
           Start Asking

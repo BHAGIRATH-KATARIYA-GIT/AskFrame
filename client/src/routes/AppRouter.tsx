@@ -10,7 +10,7 @@ const AppRouter = () => {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/dashboard" element={<DashboardPage />}>
-        <Route index element={<Navigate to="chat"  />} />
+        <Route index element={<Navigate to="chat" replace />} />
         <Route path="chat" element={<ChatPanel />} />
         <Route path="transcript" element={<TranscriptPanel />} />
         <Route path="video" element={<LoadingState />} />

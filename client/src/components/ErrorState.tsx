@@ -1,10 +1,9 @@
 
-import { Icons } from './Icons';
 
 export default function ErrorState() {
   return (
     <div className="flex flex-col items-center justify-center space-y-4 rounded-2xl border border-red-100 bg-white p-8 text-center shadow-sm">
-      <Icons.AlertCircle />
+      {/* <Icons.AlertCircle /> */}
 
       <div>
         <h4 className="text-sm font-semibold text-slate-800">

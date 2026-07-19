@@ -1,4 +1,4 @@
-import { Icons } from './Icons';
+
 
 export default function Footer() {
   return (
@@ -20,7 +20,6 @@ export default function Footer() {
                 href="#share"
                 className="w-8 h-8 rounded-full border border-slate-200 hover:border-indigo-600 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/50 transition-colors"
               >
-                <Icons.Share />
               </a>
               <a
                 href="mailto:info@askframe.ai"
