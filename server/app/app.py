@@ -48,10 +48,10 @@ def root():
     return {"message": "app is running"}
 
 
-@app.post("/test")
-def test(prompt):
-    response = ask_question(video_id="EB5_nETqdx0", user_query=prompt)
-    return {"status": 200, "response": response}
+@app.post("/get-video-id")
+def get_video_id(video_url):
+    video_id = extract_video_id(video_url)
+    return {"status": 200, "response": video_id}
 
 
 @app.post("/upload-url")
@@ -61,6 +61,7 @@ def upload_url(video_url, prompt):
     return {"status": 200, "response": response}
 
 
+
 @app.post("/get-transcript")
 def get_transcript(video_url):
     transcript = load_documents(video_id=video_url)
@@ -68,3 +69,5 @@ def get_transcript(video_url):
     response = transcript_generator(video_id=video_url, transcript=transcript)
 
     return {"status": 200, "response": response}
+
+
