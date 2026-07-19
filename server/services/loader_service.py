@@ -10,7 +10,6 @@ def load_documents(video_id):
         loader = YoutubeLoader(video_id=video_id, language="en")
         
         docs = loader.load()
-        
         return docs[0].page_content
 
     except Exception as e:

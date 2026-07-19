@@ -1,9 +1,24 @@
 from fastapi import FastAPI
 from urllib.parse import urlparse, parse_qs
+
+from openai import BaseModel
 from controllers.rag_controllers import ask_question, transcript_generator
 from services.loader_service import load_documents
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 
@@ -61,12 +76,16 @@ def upload_url(video_url, prompt):
     return {"status": 200, "response": response}
 
 
+class TrasnscriptRequest(BaseModel):
+    video_url: str
 
 @app.post("/get-transcript")
-def get_transcript(video_url):
-    transcript = load_documents(video_id=video_url)
-    print("Transcript: ", transcript)
-    response = transcript_generator(video_id=video_url, transcript=transcript)
+def get_transcript(request: TrasnscriptRequest):
+    video_url = request.video_url
+    
+    video_id = extract_video_id(url=video_url)
+    transcript = load_documents(video_id=video_id)
+    response = transcript_generator(transcript=transcript)
 
     return {"status": 200, "response": response}
 

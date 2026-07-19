@@ -27,3 +27,5 @@ dist-ssr
 Icons.tsx
 types
 
+.excalidraw
+.gitignore

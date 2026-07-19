@@ -1,5 +1,3 @@
-
-
 const suggestions = [
   'Summarize this video',
   'Explain the key concepts',
@@ -8,7 +6,7 @@ const suggestions = [
 
 export default function ChatPanel() {
   return (
-    <div className="flex h-full min-h-[600px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="flex h-full min-h-150 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* Header */}
       <header className="flex shrink-0 items-center justify-between border-b border-slate-200 px-5 py-4">
         <div className="flex items-center gap-3">

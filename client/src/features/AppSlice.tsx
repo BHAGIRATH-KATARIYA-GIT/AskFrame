@@ -15,7 +15,7 @@ export interface ChatMessage {
 
 
 export interface AppState {
-  youtubeUrl: string;
+  videoUrl: string;
   transcript: TranscriptItem[];
   messages: ChatMessage[];
   isLoading: boolean;
@@ -23,7 +23,7 @@ export interface AppState {
 }
 
 const initialState: AppState = {
-  youtubeUrl: "",
+  videoUrl: "",
   transcript: [],
   messages: [],
   isLoading: false,
@@ -34,8 +34,8 @@ export const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    setYoutubeUrl: (state, action: PayloadAction<string>) => {
-      state.youtubeUrl = action.payload;
+    setvideoUrl: (state, action: PayloadAction<string>) => {
+      state.videoUrl = action.payload;
     },
 
 
@@ -65,8 +65,7 @@ export const appSlice = createSlice({
 });
 
 export const {
-  setYoutubeUrl,
-
+  setvideoUrl,
   setTranscript,
   setMessages,
   addMessage,
