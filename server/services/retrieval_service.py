@@ -4,7 +4,7 @@ def retrieve_text(user_query):
     try:
         vector_store = get_vector_store()
         retriver = vector_store.as_retriever(
-            search_type="mmr", search_kwargs={"k": 1}
+            search_type="mmr", search_kwargs={"k": 5}
         )
         
         retrived_documents = retriver.invoke(user_query)

@@ -1,17 +1,95 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+import { BASE_URL } from "../App";
+import { IoIosSend } from "react-icons/io";
+import { HiOutlineSparkles } from "react-icons/hi";
+import { FaTrash } from "react-icons/fa";
+import "../style/ChatLoader.css";
+import { addMessage, type ChatMessage } from "../features/AppSlice";
+
 const suggestions = [
-  'Summarize this video',
-  'Explain the key concepts',
-  'List important points',
+  "Summarize this video",
+  "Explain the key concepts",
+  "List important points",
 ];
 
 export default function ChatPanel() {
+  const dispatch = useDispatch();
+  const youtubeUrl = useSelector((state: RootState) => state.app.videoUrl);
+  const messages = useSelector((state: RootState) => state.app.messages);
+  const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleQuery = async () => {
+    if (isLoading) return;
+
+    const trimmedUrl = youtubeUrl.trim();
+    const trimmedQuery = query.trim();
+
+    if (!trimmedUrl) {
+      setError("Please enter a YouTube URL");
+      return;
+    }
+
+    if (!trimmedQuery) {
+      setError("Please enter a question");
+      return;
+    }
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const Usermessage: ChatMessage = {
+        role: "user",
+        content: query,
+      };
+      dispatch(addMessage(Usermessage));
+      console.log("Msg: ", messages)
+
+      const response = await fetch(`${BASE_URL}/ask-question`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_query: trimmedQuery,
+          video_url: trimmedUrl,
+        }),
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Failed to process question");
+      }
+
+      console.log("Chat Data:", data);
+
+      // Add the response to Redux or local messages state here.
+      const AImessage: ChatMessage = {
+        role: "AI",
+        content: data?.response,
+      };
+      dispatch(addMessage(AImessage));
+      console.log("Messages: ", messages);
+
+      setQuery("");
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex h-full min-h-150 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      {/* Header */}
       <header className="flex shrink-0 items-center justify-between border-b border-slate-200 px-5 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
-            {/* <Icons.Sparkles /> */}
+            <HiOutlineSparkles size={25} />
           </div>
 
           <div>
@@ -32,31 +110,54 @@ export default function ChatPanel() {
         <button
           type="button"
           aria-label="Clear chat"
-          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+          className="flex h-9 w-9 items-center justify-center rounded-lg  transition hover:bg-slate-100 hover:text-slate-700"
         >
-          {/* <Icons.Trash /> */}
+          <FaTrash size={25} />
         </button>
       </header>
 
-      {/* Messages area */}
-      <div className="flex min-h-0 flex-1 items-center justify-center overflow-y-auto bg-slate-50/40 p-6">
-        <div className="max-w-sm text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600">
-            {/* <Icons.Sparkles /> */}
+      <div className="flex min-h-0 flex-1 overflow-y-auto bg-slate-50/40 p-6">
+        {messages.length === 0 ? (
+          <div className="flex w-full items-center justify-center">
+            <div className="max-w-sm text-center">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600">
+                <HiOutlineSparkles size={30} />
+              </div>
+
+              <h3 className="mt-4 text-base font-bold text-slate-800">
+                Start a conversation
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-500">
+                Paste a YouTube URL, process the video, and ask questions about
+                its content.
+              </p>
+            </div>
           </div>
-
-          <h3 className="mt-4 text-base font-bold text-slate-800">
-            Start a conversation
-          </h3>
-
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Paste a YouTube URL, process the video, and ask questions about its
-            content.
-          </p>
-        </div>
+        ) : (
+          <div className="flex w-full flex-col gap-4">
+            {messages.map((message) => (
+              <div
+                key={Date.now()}
+                className={`flex ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-6 ${
+                    message.role === "user"
+                      ? "rounded-br-md bg-indigo-600 text-white"
+                      : "rounded-bl-md border border-slate-200 bg-white text-slate-700"
+                  }`}
+                >
+                  {message.content}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Suggestions */}
       <div className="flex shrink-0 flex-wrap gap-2 border-t border-slate-200 px-4 py-3">
         {suggestions.map((suggestion) => (
           <button
@@ -69,25 +170,32 @@ export default function ChatPanel() {
         ))}
       </div>
 
-      {/* Input */}
       <div className="shrink-0 border-t border-slate-200 bg-white p-4">
         <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition focus-within:border-indigo-400 focus-within:bg-white focus-within:ring-4 focus-within:ring-indigo-100">
           <input
             type="text"
+            value={query}
             placeholder="Ask anything about the video..."
-            className="min-w-0 flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+            onChange={(e) => setQuery(e.target.value)}
+            disabled={isLoading}
+            className="min-w-0 flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed disabled:opacity-60"
           />
 
           <button
             type="button"
-            aria-label="Send message"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white transition hover:bg-indigo-700 active:scale-95"
+            aria-label={isLoading ? "Sending message" : "Send message"}
+            onClick={handleQuery}
+            disabled={isLoading || !query.trim()}
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 text-white transition hover:bg-indigo-700 active:scale-95 disabled:cursor-not-allowed disabled:bg-indigo-300 disabled:active:scale-100"
           >
-            {/* <Icons.Send /> */}
+            <IoIosSend size={25} />
           </button>
         </div>
+      </div>
+
+      <div>
+        {error}
       </div>
     </div>
   );
 }
-

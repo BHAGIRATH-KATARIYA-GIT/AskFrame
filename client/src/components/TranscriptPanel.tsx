@@ -10,7 +10,7 @@ export default function TranscriptPanel() {
   const transcriptEntries: TranscriptEntry[] = useSelector(
     (state: RootState) => state.app.transcript,
   ) as TranscriptEntry[];
-  console.log("Transcript: ", transcriptEntries);
+  // console.log("Transcript: ", transcriptEntries);
 
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">

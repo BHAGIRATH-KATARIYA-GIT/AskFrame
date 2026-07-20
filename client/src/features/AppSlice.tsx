@@ -8,8 +8,8 @@ export interface TranscriptItem {
 }
 
 export interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
+  id?: string;
+  role: "user" | "AI";
   content: string;
 }
 
@@ -43,9 +43,6 @@ export const appSlice = createSlice({
       state.transcript = action.payload;
     },
 
-    setMessages: (state, action: PayloadAction<ChatMessage[]>) => {
-      state.messages = action.payload;
-    },
 
     addMessage: (state, action: PayloadAction<ChatMessage>) => {
       state.messages.push(action.payload);
@@ -67,7 +64,6 @@ export const appSlice = createSlice({
 export const {
   setvideoUrl,
   setTranscript,
-  setMessages,
   addMessage,
   setLoading,
   setError,

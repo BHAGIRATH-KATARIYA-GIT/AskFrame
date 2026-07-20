@@ -11,3 +11,8 @@ MODEL_NAME = os.getenv("MODEL_NAME")
 
 CHUNK_SIZE = int(os.getenv("CHUNK_SIZE"))
 CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP"))
+
+CHROMA_DB_API_KEY = os.getenv("CHROMA_DB_API_KEY")
+CHROMA_DB_TENANT = os.getenv("CHROMA_DB_TENANT")
+
+CHROMA_DB_NAME = os.getenv("CHROMA_DB_NAME")

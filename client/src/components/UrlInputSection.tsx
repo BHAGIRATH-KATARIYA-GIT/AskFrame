@@ -10,9 +10,6 @@ export default function UrlInputSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-
-  
-
   const handleSubmit = async () => {
       
     if (!youtubeUrl.trim()) {

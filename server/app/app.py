@@ -1,16 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from urllib.parse import urlparse, parse_qs
 
 from openai import BaseModel
-from controllers.rag_controllers import ask_question, transcript_generator
+from controllers.rag_controllers import ask_question, store_transcript, transcript_generator
+from services.vector_service import index_documents
 from services.loader_service import load_documents
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:5173",
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,7 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 
 def extract_video_id(url: str) -> str:
@@ -79,14 +77,33 @@ def upload_url(video_url, prompt):
 class TrasnscriptRequest(BaseModel):
     video_url: str
 
+
 @app.post("/get-transcript")
 def get_transcript(request: TrasnscriptRequest):
+    try:
+        video_url = request.video_url
+
+        video_id = extract_video_id(url=video_url)
+        transcript_text = load_documents(video_id=video_id)
+        store_transcript(transcript=transcript_text, video_url=video_url)
+        response = transcript_generator(transcript=transcript_text)
+
+        return {"status": 200, "response": response}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class AskQuestionRequest(BaseModel):
+    user_query: str
+    video_url: str
+
+
+@app.post("/ask-question")
+def get_answer(request: AskQuestionRequest):
     video_url = request.video_url
-    
+    user_query = request.user_query
+
     video_id = extract_video_id(url=video_url)
-    transcript = load_documents(video_id=video_id)
-    response = transcript_generator(transcript=transcript)
+    response = ask_question(user_query=user_query, video_id=video_id)
 
     return {"status": 200, "response": response}
-
-
