@@ -6,6 +6,9 @@ import { FaTrash } from "react-icons/fa";
 import "../style/ChatLoader.css";
 import { getVideoURLFromLocalStorage } from "./UrlInputSection";
 import type { ChatMessage } from "../types/types";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../store/store";
+import { addMessage, clearMessages } from "../features/AppSlice";
 
 const suggestions = [
   "Summarize this video",
@@ -13,11 +16,35 @@ const suggestions = [
   "List important points",
 ];
 
+function storeMessageToLocalStorage(message: ChatMessage) {
+  const parsemessages = getMessagesFromLocalStorage();
+
+  const messages = [...parsemessages, message];
+  localStorage.setItem("messages", JSON.stringify(messages));
+
+  return messages;
+}
+
+function getMessagesFromLocalStorage() {
+  const storedmessages = localStorage.getItem("messages");
+  const parsemessages = storedmessages ? JSON.parse(storedmessages) : [];
+
+  return parsemessages;
+}
+
 export default function ChatPanel() {
+  const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const youtubeUrl = getVideoURLFromLocalStorage();
+  const transcript = useSelector((state: RootState) => state.app.transcript);
+  const messages = useSelector((state: RootState) => state.app.messages);
+
+  function clearChat(messages: ChatMessage[]) {
+    dispatch(clearMessages());
+    
+  }
 
   const handleQuery = async () => {
     if (isLoading) return;
@@ -44,6 +71,9 @@ export default function ChatPanel() {
         content: query,
       };
 
+      dispatch(addMessage(Usermessage));
+      storeMessageToLocalStorage(Usermessage);
+
       const response = await fetch(`${BASE_URL}/ask-question`, {
         method: "POST",
         headers: {
@@ -52,6 +82,7 @@ export default function ChatPanel() {
         body: JSON.stringify({
           user_query: trimmedQuery,
           video_url: trimmedUrl,
+          transcript: transcript,
         }),
       });
 
@@ -68,6 +99,9 @@ export default function ChatPanel() {
         role: "AI",
         content: data?.response,
       };
+
+      dispatch(addMessage(AImessage));
+      storeMessageToLocalStorage(AImessage);
 
       setQuery("");
     } catch (error) {
@@ -104,6 +138,7 @@ export default function ChatPanel() {
           type="button"
           aria-label="Clear chat"
           className="flex h-9 w-9 items-center justify-center rounded-lg  transition hover:bg-slate-100 hover:text-slate-700"
+          onClick={() => clearChat(messages)}
         >
           <FaTrash size={25} />
         </button>
@@ -129,9 +164,9 @@ export default function ChatPanel() {
           </div>
         ) : (
           <div className="flex w-full flex-col gap-4">
-            {messages.map((message) => (
+            {messages.map((message: ChatMessage) => (
               <div
-                key={Date.now()}
+                key={crypto.randomUUID()}
                 className={`flex ${
                   message.role === "user" ? "justify-end" : "justify-start"
                 }`}
@@ -190,3 +225,5 @@ export default function ChatPanel() {
     </div>
   );
 }
+
+export { getMessagesFromLocalStorage, storeMessageToLocalStorage };

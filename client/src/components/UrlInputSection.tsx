@@ -1,29 +1,37 @@
 import { useState } from "react";
 import { BASE_URL } from "../App";
 import type { TranscriptEntry } from "../types/types";
+import { useDispatch } from "react-redux";
+import { addMessage, setTranscript } from "../features/AppSlice";
 
-const storeTranscriptToLocalStorage = (transcript: TranscriptEntry[]) => {
+function storeTranscriptToLocalStorage  (transcript: TranscriptEntry[]) {
   const storedTranscript = JSON.stringify(transcript);
   localStorage.setItem("transcript", storedTranscript);
 };
 
-const storeVideoURLToLocalStorage = (video_url: string) => {
+function storeVideoURLToLocalStorage (video_url: string){
   localStorage.setItem("video_url", video_url);
 };
 
-const getTranscriptFromLocalStorage = () => {
+function getTranscriptFromLocalStorage(){
   const storedData = localStorage.getItem("transcript");
   const parsedData = storedData ? JSON.parse(storedData) : [];
 
   return parsedData;
 };
 
-const getVideoURLFromLocalStorage = () => {
-  return localStorage.getItem("video_url");
+function getVideoURLFromLocalStorage  ()  {
+  const storedData = localStorage.getItem("video_url");
+  return storedData ? storedData : ""
 };
 
+function clearLocalStorage (){
+  localStorage.clear()
+}
+
 export default function UrlInputSection() {
-  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const dispatch = useDispatch()
+  const [youtubeUrl, setYoutubeUrl] = useState(() => getVideoURLFromLocalStorage());
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -55,6 +63,7 @@ export default function UrlInputSection() {
 
       const data = await response.json();
 
+      dispatch(setTranscript(data?.response))
       storeTranscriptToLocalStorage(data?.response);
       storeVideoURLToLocalStorage(youtubeUrl.trim());
       console.log("Data", data);
@@ -96,9 +105,12 @@ export default function UrlInputSection() {
   );
 }
 
+
+
 export {
   getTranscriptFromLocalStorage,
   getVideoURLFromLocalStorage,
   storeTranscriptToLocalStorage,
   storeVideoURLToLocalStorage,
+  clearLocalStorage
 };

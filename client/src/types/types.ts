@@ -8,3 +8,4 @@ export interface TranscriptEntry {
   time: string;
   text: string;
 }
+

@@ -1,8 +1,15 @@
+import { useState } from "react";
 import type { TranscriptEntry } from "../types/types";
 import { getTranscriptFromLocalStorage } from "./UrlInputSection";
+import { useSelector } from "react-redux";
+import type { RootState } from "../store/store";
 
 export default function TranscriptPanel() {
-  const transcriptEntries: TranscriptEntry[] = getTranscriptFromLocalStorage();
+
+  // const transcriptEntries: TranscriptEntry[] = getTranscriptFromLocalStorage();
+
+  // const [transcriptEntries, setTranscriptEntries] = useState()
+  const transcriptEntries = useSelector((state: RootState) => state.app.transcript)
   console.log("Transcript: ", transcriptEntries);
 
   return (
@@ -36,3 +43,4 @@ export default function TranscriptPanel() {
     </div>
   );
 }
+
