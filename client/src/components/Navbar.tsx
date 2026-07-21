@@ -19,7 +19,7 @@ export default function Navbar() {
             AF
           </div>
 
-          <span className="hidden text-lg font-bold tracking-tight text-slate-900 dark:text-white xs:block sm:text-xl">
+          <span className="block text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-xl">
             AskFrame
           </span>
         </NavLink>

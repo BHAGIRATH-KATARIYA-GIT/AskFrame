@@ -44,6 +44,11 @@ export const appSlice = createSlice({
       localStorage.removeItem("video_url");
     },
 
+    clearTranscript: (state) => {
+      state.transcript = [];
+      localStorage.removeItem("transcript");
+    },
+
     resetApp: () => {
         localStorage.clear()
     },
@@ -56,6 +61,7 @@ export const {
   addMessage,
   clearMessages,
   clearVideoURL,
+  clearTranscript,
   resetApp,
 } = appSlice.actions;
 

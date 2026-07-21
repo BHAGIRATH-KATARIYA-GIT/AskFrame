@@ -25,6 +25,7 @@ function clearLocalStorage() {
   localStorage.clear();
 }
 
+
 function storeMessageToLocalStorage(message: ChatMessage) {
   const parsemessages = getMessagesFromLocalStorage();
 

@@ -6,8 +6,7 @@ import { Outlet, NavLink } from "react-router-dom";
 export default function DashboardPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-slate-50 text-slate-900 transition-colors dark:bg-slate-950 dark:text-slate-100">
-      z
-      <nav className="border-b border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-6 lg:px-8">
+      <nav className="shrink-0 border-b border-slate-200 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:px-6 lg:px-8">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
           <NavLink
             to="/"
@@ -21,27 +20,10 @@ export default function DashboardPage() {
               AskFrame
             </span>
           </NavLink>
-
-          <div className="flex items-center">
-            <button
-              type="button"
-              aria-label="Toggle dark mode"
-              className="relative flex h-9 w-16 items-center rounded-full border border-slate-300 bg-slate-200 p-1 transition-colors dark:border-slate-700 dark:bg-indigo-600"
-            >
-              <span className="absolute left-2 text-xs text-slate-500 dark:text-white">
-                ☀
-              </span>
-
-              <span className="absolute right-2 text-xs text-slate-500 dark:text-white">
-                ☾
-              </span>
-
-              <span className="relative z-10 h-7 w-7 rounded-full bg-white shadow-md transition-transform duration-300 dark:translate-x-7 dark:bg-slate-900" />
-            </button>
-          </div>
         </div>
       </nav>
-      <main className="flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+
+      <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="mx-auto w-full max-w-7xl">
           <header className="mb-6 sm:mb-8">
             <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl lg:text-4xl">
@@ -54,19 +36,19 @@ export default function DashboardPage() {
           </header>
 
           <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-8">
-            {/* Left section */}
             <aside className="flex min-w-0 flex-col gap-5">
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900 sm:p-5">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
                 <UrlInputSection />
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900 sm:p-5">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5">
                 <FeatureTabs />
               </div>
             </aside>
 
             <section className="min-h-125 min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-colors dark:border-slate-800 dark:bg-slate-900 sm:min-h-150 lg:sticky lg:top-6 lg:h-[calc(100vh-8rem)]">
-              <Outlet />
+              {" "}
+              <Outlet />{" "}
             </section>
           </div>
         </div>
