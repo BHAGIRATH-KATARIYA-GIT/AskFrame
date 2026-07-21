@@ -1,10 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { ChatMessage, TranscriptEntry } from "../types/types";
-import {
-  getTranscriptFromLocalStorage,
-  getVideoURLFromLocalStorage,
-} from "../components/UrlInputSection";
-import { getMessagesFromLocalStorage } from "../components/ChatPanel";
+
+import { getMessagesFromLocalStorage, getTranscriptFromLocalStorage, getVideoURLFromLocalStorage, storeVideoURLToLocalStorage, storeTranscriptToLocalStorage, storeMessageToLocalStorage, clearLocalStorage } from "../services/localstorage";
 
 export interface AppState {
   videoUrl: string;
@@ -18,6 +15,8 @@ const initialState: AppState = {
   messages: getMessagesFromLocalStorage(),
 };
 
+
+
 export const appSlice = createSlice({
   name: "app",
   initialState,
@@ -28,10 +27,12 @@ export const appSlice = createSlice({
 
     setTranscript: (state, action: PayloadAction<TranscriptEntry[]>) => {
       state.transcript = action.payload;
+      storeTranscriptToLocalStorage(action.payload);
     },
 
     addMessage: (state, action: PayloadAction<ChatMessage>) => {
       state.messages.push(action.payload);
+      storeMessageToLocalStorage(action.payload);
     },
 
     clearMessages: (state) => {
@@ -39,7 +40,13 @@ export const appSlice = createSlice({
       localStorage.removeItem("messages");
     },
 
-    resetApp: () => initialState,
+    clearVideoURL: () => {
+      localStorage.removeItem("video_url");
+    },
+
+    resetApp: () => {
+        localStorage.clear()
+    },
   },
 });
 
@@ -48,6 +55,7 @@ export const {
   setTranscript,
   addMessage,
   clearMessages,
+  clearVideoURL,
   resetApp,
 } = appSlice.actions;
 
