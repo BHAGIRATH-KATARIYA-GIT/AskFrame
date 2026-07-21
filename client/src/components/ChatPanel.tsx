@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../store/store";
 import { BASE_URL } from "../App";
 import { IoIosSend } from "react-icons/io";
 import { HiOutlineSparkles } from "react-icons/hi";
 import { FaTrash } from "react-icons/fa";
 import "../style/ChatLoader.css";
-import { addMessage, type ChatMessage } from "../features/AppSlice";
+import { getVideoURLFromLocalStorage } from "./UrlInputSection";
+import type { ChatMessage } from "../types/types";
 
 const suggestions = [
   "Summarize this video",
@@ -15,17 +14,15 @@ const suggestions = [
 ];
 
 export default function ChatPanel() {
-  const dispatch = useDispatch();
-  const youtubeUrl = useSelector((state: RootState) => state.app.videoUrl);
-  const messages = useSelector((state: RootState) => state.app.messages);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const youtubeUrl = getVideoURLFromLocalStorage();
 
   const handleQuery = async () => {
     if (isLoading) return;
 
-    const trimmedUrl = youtubeUrl.trim();
+    const trimmedUrl = youtubeUrl?.trim();
     const trimmedQuery = query.trim();
 
     if (!trimmedUrl) {
@@ -46,8 +43,6 @@ export default function ChatPanel() {
         role: "user",
         content: query,
       };
-      dispatch(addMessage(Usermessage));
-      console.log("Msg: ", messages)
 
       const response = await fetch(`${BASE_URL}/ask-question`, {
         method: "POST",
@@ -73,8 +68,6 @@ export default function ChatPanel() {
         role: "AI",
         content: data?.response,
       };
-      dispatch(addMessage(AImessage));
-      console.log("Messages: ", messages);
 
       setQuery("");
     } catch (error) {
@@ -193,9 +186,7 @@ export default function ChatPanel() {
         </div>
       </div>
 
-      <div>
-        {error}
-      </div>
+      <div>{error}</div>
     </div>
   );
 }

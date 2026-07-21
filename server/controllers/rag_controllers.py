@@ -17,7 +17,7 @@ def store_transcript(transcript, video_url):
     try:
         
         if transcript_exist(video_url):
-            print("Transcript Alredy Exist")
+            # print("Transcript Alredy Exist")
             return 
         
         docs = Document(
@@ -46,11 +46,12 @@ def ask_question(user_query: str, video_url: str, transcript: str = "qHFcqL11LeQ
 
         store_transcript(transcript=transcript, video_url=video_url)
 
+        # TODO : fetch relevent data
         # retrive relevent data based on user query
-        retrived_text = retrieve_text(user_query)
+        #retrived_text = retrieve_text(user_query)
 
         # send context + query to llm
-        llm_resonse = get_response(user_query=user_query, context=retrived_text)
+        llm_resonse = get_response(user_query=user_query, context=transcript)
 
         # print("AI: ", llm_resonse)
         return llm_resonse
@@ -120,3 +121,5 @@ Output instructions:
     except Exception as e:
         print("llm get response error: ", str(e))
         raise ValueError("llm get response error: ", str(e))
+
+

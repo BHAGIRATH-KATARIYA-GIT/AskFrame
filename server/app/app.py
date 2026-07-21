@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from urllib.parse import urlparse, parse_qs
 
 from openai import BaseModel
+from pydantic import Field
 from controllers.rag_controllers import ask_question, store_transcript, transcript_generator
 from services.vector_service import index_documents
 from services.loader_service import load_documents
@@ -93,17 +94,26 @@ def get_transcript(request: TrasnscriptRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+class TranscriptEntry(BaseModel):
+    time: str = Field(description="Estimated timestamp in MM:SS format")
+    text: str = Field(
+        description="Exact transcript text without changing any original word"
+    )
+
+
 class AskQuestionRequest(BaseModel):
     user_query: str
     video_url: str
+    transcript: list[TranscriptEntry]
 
 
 @app.post("/ask-question")
 def get_answer(request: AskQuestionRequest):
     video_url = request.video_url
     user_query = request.user_query
+    transcript = request.transcript
 
     video_id = extract_video_id(url=video_url)
-    response = ask_question(user_query=user_query, video_id=video_id)
+    response = ask_question(user_query=user_query, video_url=video_url, transcript=transcript)
 
     return {"status": 200, "response": response}

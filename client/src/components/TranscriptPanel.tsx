@@ -1,16 +1,9 @@
-import { useSelector } from "react-redux";
-import type { RootState } from "../store/store";
-
-interface TranscriptEntry {
-  time: string;
-  text: string;
-}
+import type { TranscriptEntry } from "../types/types";
+import { getTranscriptFromLocalStorage } from "./UrlInputSection";
 
 export default function TranscriptPanel() {
-  const transcriptEntries: TranscriptEntry[] = useSelector(
-    (state: RootState) => state.app.transcript,
-  ) as TranscriptEntry[];
-  // console.log("Transcript: ", transcriptEntries);
+  const transcriptEntries: TranscriptEntry[] = getTranscriptFromLocalStorage();
+  console.log("Transcript: ", transcriptEntries);
 
   return (
     <div className="space-y-4 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">

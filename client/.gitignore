@@ -25,7 +25,6 @@ dist-ssr
 
 .env
 Icons.tsx
-types
 
 .excalidraw
 .gitignore

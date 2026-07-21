@@ -28,7 +28,6 @@ def get_vector_store():
         raise ValueError("get_vector_store ERROR: ", str(e))
 
 
-
 def transcript_exist(video_url):
     vector_store = get_vector_store()
     result = vector_store.get(

@@ -1,6 +1,6 @@
-export interface Message {
-  sender: 'assistant' | 'user';
-  text: string;
+export interface ChatMessage {
+  role: 'AI' | 'user';
+  content: string;
   isTakeaway?: boolean;
 }
 

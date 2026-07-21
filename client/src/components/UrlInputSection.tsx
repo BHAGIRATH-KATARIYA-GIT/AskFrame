@@ -1,22 +1,37 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setTranscript, setvideoUrl } from "../features/AppSlice";
 import { BASE_URL } from "../App";
-import type { AppDispatch } from "../store/store";
+import type { TranscriptEntry } from "../types/types";
+
+const storeTranscriptToLocalStorage = (transcript: TranscriptEntry[]) => {
+  const storedTranscript = JSON.stringify(transcript);
+  localStorage.setItem("transcript", storedTranscript);
+};
+
+const storeVideoURLToLocalStorage = (video_url: string) => {
+  localStorage.setItem("video_url", video_url);
+};
+
+const getTranscriptFromLocalStorage = () => {
+  const storedData = localStorage.getItem("transcript");
+  const parsedData = storedData ? JSON.parse(storedData) : [];
+
+  return parsedData;
+};
+
+const getVideoURLFromLocalStorage = () => {
+  return localStorage.getItem("video_url");
+};
 
 export default function UrlInputSection() {
-  const dispatch = useDispatch<AppDispatch>();
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-      
     if (!youtubeUrl.trim()) {
       setError("Please enter a YouTube URL");
       return;
     }
-
 
     try {
       setIsLoading(true);
@@ -30,8 +45,8 @@ export default function UrlInputSection() {
           video_url: youtubeUrl.trim(),
         }),
       });
-      
-      console.log("Response: ", response)
+
+      console.log("Response: ", response);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
@@ -39,12 +54,12 @@ export default function UrlInputSection() {
       }
 
       const data = await response.json();
-      dispatch(setvideoUrl(youtubeUrl.trim()));
-      dispatch(setTranscript(data?.response));
+
+      storeTranscriptToLocalStorage(data?.response);
+      storeVideoURLToLocalStorage(youtubeUrl.trim());
       console.log("Data", data);
-      
     } catch (error) {
-      console.log("Error: ", error)
+      console.log("Error: ", error);
       setError(error instanceof Error ? error.message : "Something went wrong");
     } finally {
       setIsLoading(false);
@@ -80,3 +95,10 @@ export default function UrlInputSection() {
     </div>
   );
 }
+
+export {
+  getTranscriptFromLocalStorage,
+  getVideoURLFromLocalStorage,
+  storeTranscriptToLocalStorage,
+  storeVideoURLToLocalStorage,
+};
